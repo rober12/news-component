@@ -1,0 +1,179 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../paper-header-panel/paper-header-panel.html">
+<!--
+An element providing a solution to no problem in particular.
+
+Example:
+
+    <news-component></news-component>
+
+Example:
+
+    <news-component>
+      <h2>Hello news-component</h2>
+    </news-component>
+
+@demo demo/index.html
+@hero hero.svg
+-->
+
+<dom-module id="news-component">
+  <template>
+    <style>
+      :host{
+        width: 50px;
+        height: 50px;
+        
+      }
+      #lista{
+        font-weight: 100;  
+        border:1px solid black;
+        margin:15px;
+      }
+      .author{
+        font-size: 130%;
+        font-weight: bold;
+        text-decoration-line: underline;
+        text-align: center;
+       
+      } 
+      #uri{
+        color: black;
+      }   
+      .title{
+
+
+      }
+      #image{
+        /* padding: 10px; */
+        margin: 10px;
+        
+        border: 2px solid black; 
+        float: right;
+        width: 250px;
+      }
+     
+      .description{
+        font-size: 120%;
+      }
+      
+      .publishedAt{
+        text-align: left;
+      }
+      .barra{
+        text-align: center;
+        font-size: 250%;
+
+        
+      }
+      
+    </style>
+    <iron-ajax id="peticion" auto handle-as="json" url="https://newsapi.org/v2/everything?q={{search}}&sortBy=publishedAt&apiKey={{api_key}}&lang=es"
+      on-response="getCurrentData">
+    </iron-ajax>
+
+    <paper-header-panel class="waterfall">
+      <paper-toolbar slot="header">
+        <div class="barra">------------------------------News------------------------------</div>
+      </paper-toolbar>
+    </paper-header-panel>
+    <paper-input label="buscar" value="{{search}}"></paper-input>
+    <!-- <button on-click="pedirDatos">Enviar</button> -->
+  
+      <template is="dom-repeat" items="{{articles}}">
+        <div id="lista" >
+          
+          <p class="author">
+            <a id="uri" href={{item.url}}>Autor: {{item.author}}</a>
+          </p>
+
+          <img id="image" src="{{item.urlToImage}}">
+          
+          <p class="title" >Título: {{item.title}}</p>
+          
+          <p class="description">Descripción: {{item.description}}</p>
+          
+          <p class="publishedAt">Fecha Publicación: {{item.publishedAt}}</p>
+        </div>
+      </template>
+    
+  </template>
+
+  <script>
+    Polymer({
+      is: 'news-component',
+
+      properties: {
+        id: Number,
+        name: String,
+        author: String,
+        description: String,
+        publishedAt: Date,
+        url: String,
+        urlToImage:String,
+
+        articles : {
+          type: Array,
+          value: function(){return [];}
+        },
+        api_key: {
+          type: String,
+          value: "9ab5bd618af84df68cb09ab31e07eefe"
+        },
+        search: {
+          type: String,
+          value: "fortnite"
+        },
+    },
+
+      // Element Lifecyclearticles
+
+      ready: function () {
+        // `ready` is called after all elements have been configured, but
+        // propagates bottom-up. This element's children are ready, but parents
+        // are not.
+        //
+        // This is the point where you should make modifications to the DOM (when
+        // necessary), or kick off any processes the element wants to perform.
+      },
+
+      attached: function () {
+        // `attached` fires once the element and its parents have been inserted
+        // into a document.
+        //
+        // This is a good place to perform any work related to your element's
+        // visual state or active behavior (measuring sizes, beginning animations,
+        // loading resources, etc).
+      },
+
+      detached: function () {
+        // The analog to `attached`, `detached` fires when the element has been
+        // removed from a document.
+        //
+        // Use this to clean up anything you did in `attached`.
+      },
+      getCurrentData: function (event) {
+        console.log(event.detail.response);
+        this.set("articles", event.detail.response.articles);
+        // var response = event.detail.response;
+        
+      },
+      pedirDatos: function(){
+        this.$.peticion.generateRequest();
+      }
+    });
+  </script>
+</dom-module>
