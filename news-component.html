@@ -35,7 +35,7 @@ Example:
 <dom-module id="news-component">
   <template>
     <style>
-      :host{
+      :host {
         /* las 5 lineas siguientes te pone el componente en un determinado tamaño, en ese caso en un cuadrado para la plataforma picbit */
         display: inline-block;
         width: var(--googleplus-timeline-width, 350px);
@@ -43,62 +43,113 @@ Example:
         min-height: 350px;
         min-width: 350px;
         /* border:1px solid black; */
-        background-color:#e2e2e2;
+        background-color: #e2e2e2;
       }
-      #lista{
-        font-weight: 100;  
-        border:2px solid black;
+
+      #lista {
+        font-weight: 100;
+        border: 2px solid black;
         border-style: groove;
-        padding:8px 12px;
-        margin:6px 0;
-        background-color:white;
+        padding: 8px 12px;
+        margin: 6px 0;
+        background-color: white;
       }
-      .author{
+
+      .author {
         font-size: 100%;
-        font-weight: bold;
-        text-decoration-line: underline;
+
         text-align: center;
-       
+
       }
-      .author > #uri:hover{
+
+      /* .author > #uri:hover{
         color:darkgoldenrod;
         transition: color 0.2s linear; 
-      }
-      #uri{
+      } */
+
+      #uri {
+        text-decoration: none;
         color: black;
-      }   
-      .title{
+        font-weight: bold;
+      }
 
+      .title {}
+
+      .title>#uri:hover {
+        color: darkgoldenrod;
+        transition: color 0.2s linear;
 
       }
-      #image{
+
+      #image {
         /* padding: 10px; */
         position: relative;
         height: auto;
-        border: 2px solid blacks; 
-        float: auto;;
+        border: 2px solid blacks;
+        float: auto;
         width: 100%;
         box-sizing: border-box;
       }
-     
-      .description{
+
+      .description.brief {
+        /* ellipsis te muestra los puntos suspensivos */
+        text-overflow: ellipsis;
+        overflow: hidden;
+        display: -webkit-box;
+        /* te permite definir el numero de lineas que quieres mostrar por defecto */
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
+
+      .description {
         font-size: 120%;
         text-align: justify;
-        }
-      
-      .publishedAt{
-        text-align: left;
       }
-      paper-toolbar{
+
+      .description:hover {
+        color: rgb(94, 89, 89);
+        cursor: pointer;
+      }
+
+      .publishedAt {
+        text-align: left;
+        font-size: 90%;
+        font-weight: bold;
+        color: rgb(85, 85, 85);
+      }
+
+      paper-toolbar {
         text-align: center;
         font-size: 250%;
         background: rgb(92, 207, 92);
       }
+      .barra{
+        margin-top: 5px;
+        margin-left: 10px;
+        font-size: 50%;
+        text-align: left;
+        font-family:Verdana,Helvetica;
+      }
+      .boton{
+        margin-top: 5px;
+        margin-right: 10px;
+        float:right;
+        text-decoration: none;
+        font-size:10px;
+        font-family:Verdana,Helvetica;
+        font-weight:bold;
+        color:white;
+        background:#035803;
+        /* border:0px;
+        width:80px;
+        height:19px; */
+      }
       .input-container {
+        
         flex: none;
         margin: 0 8px 0 16px;
         position: relative;
-        top: -2px;
+        /* top: -2px; */
         -webkit-animation: fadein 0.3s;
         /* Safari, Chrome and Opera > 12.1 */
         -moz-animation: fadein 0.3s;
@@ -109,6 +160,7 @@ Example:
         /* Opera < 12.1 */
         animation: fadein 0.3s;
       }
+
       input {
         background-color: transparent;
         outline: none;
@@ -120,9 +172,11 @@ Example:
         color: white;
         font-weight: bold;
       }
-      .container{
-        padding:8px 12px;
+
+      .container {
+        padding: 8px 12px;
       }
+
       
     </style>
     <iron-ajax id="peticion" handle-as="json" url="https://newsapi.org/v2/everything?q={{search}}&sortBy=publishedAt&apiKey={{api_key}}&language={{language}}"
@@ -131,40 +185,44 @@ Example:
 
     <paper-header-panel class="waterfall">
       <paper-toolbar slot="header">
-        <!-- <div class="barra">News</div> -->
-        
-        <div class="input-container">
-          <input id="searchBox" placeholder="Introduzca su búsqueda" on-keyup="keyupInput" value$="{{search}}"  />
-         
+        <div class="barra">
+          News
+          <button class="boton">
+            <td><input type="submit" value="Home" on-touch="home"></td>  
+          </button>
         </div>
-     
+        <div class="input-container">
+          <input id="searchBox" placeholder="Introduzca su búsqueda" on-keyup="keyupInput" value$="{{search}}" />
+          
+        </div>
       </paper-toolbar>
       <div class="container">
         <template is="dom-repeat" items="{{articles}}">
-          <div id="lista" >
-            
+          <div id="lista">
+
             <p class="author">
-              <a id="uri" href={{item.url}}>Autor: {{item.author}}</a>
+              Autor: {{item.author}}
             </p>
-            
-            <p class="title" >Título: {{item.title}}</p>
+
+            <p class="title">
+              <a id="uri" href={{item.url}}> {{item.title}}</a>
+            </p>
 
             <template is="dom-if" if="{{item.urlToImage}}">
               <img id="image" src="{{item.urlToImage}}">
             </template>
 
-            <p class="description">Descripción: {{item.description}}</p>
-            
-            <p class="publishedAt">Fecha Publicación: {{item.publishedAt}}</p>
+            <p class="description brief" on-click="toggleSize">Descripción: {{item.description}}</p>
+
+            <p class="publishedAt"> Fecha: {{item.publishedAt}}</p>
           </div>
         </template>
         <template is="dom-if" if="{{isEmpty}}">
-          <p>No hay elementos</p>
+          <p>Sin resultados</p>
         </template>
       </div>
     </paper-header-panel>
     <!-- <button on-click="pedirDatos">Enviar</button> -->
-    
   </template>
 
   <script>
@@ -178,16 +236,16 @@ Example:
         description: String,
         publishedAt: Date,
         url: String,
-        urlToImage:String,
-        
+        urlToImage: String,
+
         language: {
-          type:String,
+          type: String,
           value: "es"
         },
 
-        articles : {
+        articles: {
           type: Array,
-          value: function(){return [];}
+          value: function () { return []; }
         },
         api_key: {
           type: String,
@@ -197,7 +255,7 @@ Example:
           type: String,
           value: ""
         },
-    },
+      },
 
       // Element Lifecyclearticles
 
@@ -227,41 +285,46 @@ Example:
       },
       getCurrentData: function (event) {
         console.log(event.detail.response);
-        var list= event.detail.response.articles;
+        var list = event.detail.response.articles;
         this.set("articles", list);
         // var response = event.detail.response;
-        moment.locale('es');        
-        for(var i=0;i<list.length;i++ ){
-            var day = moment.unix(new Date(list[i].publishedAt));
+        moment.locale('es');
+        for (var i = 0; i < list.length; i++) {
+          // sirve para cargar lo que contenga moment.js
+          var day = moment(new Date(list[i].publishedAt));
 
-            list[i].publishedAt = day.format("dddd[, ]DD/MM/YYYY hh:mm")
+          list[i].publishedAt = day.format("dddd[, ]DD/MM/YYYY hh:mm")
         }
 
-        if (list.length ==0){
-          this.isEmpty=true;
+        if (list.length == 0) {
+          this.isEmpty = true;
         } else {
           this.isEmpty = false;
         }
-        
+
       },
-      pedirDatos: function(){
+      pedirDatos: function () {
         this.$.peticion.generateRequest();
       },
       keyupInput: function (e) {
         if (e.keyCode === 13) {
           this.search = this.$.searchBox.value;
           // Hacer otra peticion con los datos nuevos filtros
-         var ae = this.$.peticion.generateRequest();
-         console.log(ae);
+          this.$.peticion.generateRequest();
+
           // Quitar el valor de busqueda
 
         }
       },
-      // PeticionEmpty: function(){
-      //   if(this.search==null){
+      // esta función nos permite presentar solo tres lineas de la descripcion y cuando pulses el texto que se despliegue entero
+      toggleSize: function (evt) {
+        var target = evt.currentTarget;
+        target.classList.toggle("brief");
 
-      //   }
-      // }
+      },
+      home: function(e){
+        this.set("articles", list);
+      }
     });
   </script>
 </dom-module>
