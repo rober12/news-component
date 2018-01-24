@@ -19,23 +19,5 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <body unresolved>
 
     <news-component></news-component>
-
-    <script>
-      var seedElement = document.querySelector('news-component');
-
-      document.querySelector('#saybtn').addEventListener('click', function() {
-        alert(seedElement.sayHello('Hallo!'));
-      });
-
-      document.querySelector('#laserbtn').addEventListener('click', function() {
-        seedElement.fireLasers();
-      });
-
-      document.addEventListener("news-component-lasers", function(e) {
-        console.log(e.detail.sound);
-      });
-
-    </script>
-
   </body>
 </html>

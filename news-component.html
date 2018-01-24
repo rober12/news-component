@@ -13,6 +13,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../paper-input/paper-input.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../paper-header-panel/paper-header-panel.html">
+<script type='text/javascript' src='moment.js'></script>
+<script type="text/javascript" src="https://momentjs.com/downloads/moment-with-locales.min.js"></script>
 <!--
 An element providing a solution to no problem in particular.
 
@@ -34,22 +36,34 @@ Example:
   <template>
     <style>
       :host{
-        width: 50px;
-        height: 50px;
-        
+        /* las 5 lineas siguientes te pone el componente en un determinado tamaño, en ese caso en un cuadrado para la plataforma picbit */
+        display: inline-block;
+        width: var(--googleplus-timeline-width, 350px);
+        height: var(--googleplus-timeline-height, 350px);
+        min-height: 350px;
+        min-width: 350px;
+        /* border:1px solid black; */
+        background-color:#e2e2e2;
       }
       #lista{
         font-weight: 100;  
-        border:1px solid black;
-        margin:15px;
+        border:2px solid black;
+        border-style: groove;
+        padding:8px 12px;
+        margin:6px 0;
+        background-color:white;
       }
       .author{
-        font-size: 130%;
+        font-size: 100%;
         font-weight: bold;
         text-decoration-line: underline;
         text-align: center;
        
-      } 
+      }
+      .author > #uri:hover{
+        color:darkgoldenrod;
+        transition: color 0.2s linear; 
+      }
       #uri{
         color: black;
       }   
@@ -59,57 +73,97 @@ Example:
       }
       #image{
         /* padding: 10px; */
-        margin: 10px;
-        
-        border: 2px solid black; 
-        float: right;
-        width: 250px;
+        position: relative;
+        height: auto;
+        border: 2px solid blacks; 
+        float: auto;;
+        width: 100%;
+        box-sizing: border-box;
       }
      
       .description{
         font-size: 120%;
-      }
+        text-align: justify;
+        }
       
       .publishedAt{
         text-align: left;
       }
-      .barra{
+      paper-toolbar{
         text-align: center;
         font-size: 250%;
         background: rgb(92, 207, 92);
-
-        
+      }
+      .input-container {
+        flex: none;
+        margin: 0 8px 0 16px;
+        position: relative;
+        top: -2px;
+        -webkit-animation: fadein 0.3s;
+        /* Safari, Chrome and Opera > 12.1 */
+        -moz-animation: fadein 0.3s;
+        /* Firefox < 16 */
+        -ms-animation: fadein 0.3s;
+        /* Internet Explorer */
+        -o-animation: fadein 0.3s;
+        /* Opera < 12.1 */
+        animation: fadein 0.3s;
+      }
+      input {
+        background-color: transparent;
+        outline: none;
+        border: none;
+        border-bottom: 2px solid #eee;
+        width: 100%;
+        font-size: 16px;
+        font-family: 'Dosis', sans-serif;
+        color: white;
+        font-weight: bold;
+      }
+      .container{
+        padding:8px 12px;
       }
       
     </style>
-    <iron-ajax id="peticion" auto handle-as="json" url="https://newsapi.org/v2/everything?q={{search}}&sortBy=publishedAt&apiKey={{api_key}}&lang=es"
+    <iron-ajax id="peticion" handle-as="json" url="https://newsapi.org/v2/everything?q={{search}}&sortBy=publishedAt&apiKey={{api_key}}&language={{language}}"
       on-response="getCurrentData">
     </iron-ajax>
 
     <paper-header-panel class="waterfall">
       <paper-toolbar slot="header">
-        <div class="barra">------------------------------News------------------------------</div>
-      </paper-toolbar>
-    </paper-header-panel>
-    <paper-input label="buscar" value="{{search}}"></paper-input>
-    <!-- <button on-click="pedirDatos">Enviar</button> -->
-  
-      <template is="dom-repeat" items="{{articles}}">
-        <div id="lista" >
-          
-          <p class="author">
-            <a id="uri" href={{item.url}}>Autor: {{item.author}}</a>
-          </p>
-
-          <img id="image" src="{{item.urlToImage}}">
-          
-          <p class="title" >Título: {{item.title}}</p>
-          
-          <p class="description">Descripción: {{item.description}}</p>
-          
-          <p class="publishedAt">Fecha Publicación: {{item.publishedAt}}</p>
+        <!-- <div class="barra">News</div> -->
+        
+        <div class="input-container">
+          <input id="searchBox" placeholder="Introduzca su búsqueda" on-keyup="keyupInput" value$="{{search}}"  />
+         
         </div>
-      </template>
+     
+      </paper-toolbar>
+      <div class="container">
+        <template is="dom-repeat" items="{{articles}}">
+          <div id="lista" >
+            
+            <p class="author">
+              <a id="uri" href={{item.url}}>Autor: {{item.author}}</a>
+            </p>
+            
+            <p class="title" >Título: {{item.title}}</p>
+
+            <template is="dom-if" if="{{item.urlToImage}}">
+              <img id="image" src="{{item.urlToImage}}">
+            </template>
+
+            <p class="description">Descripción: {{item.description}}</p>
+            
+            <p class="publishedAt">Fecha Publicación: {{item.publishedAt}}</p>
+          </div>
+        </template>
+        <template is="dom-if" if="{{isEmpty}}">
+          <p>No hay elementos</p>
+        </template>
+      </div>
+    </paper-header-panel>
+    <!-- <button on-click="pedirDatos">Enviar</button> -->
     
   </template>
 
@@ -125,6 +179,11 @@ Example:
         publishedAt: Date,
         url: String,
         urlToImage:String,
+        
+        language: {
+          type:String,
+          value: "es"
+        },
 
         articles : {
           type: Array,
@@ -136,7 +195,7 @@ Example:
         },
         search: {
           type: String,
-          value: "fortnite"
+          value: ""
         },
     },
 
@@ -168,13 +227,41 @@ Example:
       },
       getCurrentData: function (event) {
         console.log(event.detail.response);
-        this.set("articles", event.detail.response.articles);
+        var list= event.detail.response.articles;
+        this.set("articles", list);
         // var response = event.detail.response;
+        moment.locale('es');        
+        for(var i=0;i<list.length;i++ ){
+            var day = moment.unix(new Date(list[i].publishedAt));
+
+            list[i].publishedAt = day.format("dddd[, ]DD/MM/YYYY hh:mm")
+        }
+
+        if (list.length ==0){
+          this.isEmpty=true;
+        } else {
+          this.isEmpty = false;
+        }
         
       },
       pedirDatos: function(){
         this.$.peticion.generateRequest();
-      }
+      },
+      keyupInput: function (e) {
+        if (e.keyCode === 13) {
+          this.search = this.$.searchBox.value;
+          // Hacer otra peticion con los datos nuevos filtros
+         var ae = this.$.peticion.generateRequest();
+         console.log(ae);
+          // Quitar el valor de busqueda
+
+        }
+      },
+      // PeticionEmpty: function(){
+      //   if(this.search==null){
+
+      //   }
+      // }
     });
   </script>
 </dom-module>
