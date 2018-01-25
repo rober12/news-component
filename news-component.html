@@ -57,9 +57,10 @@ Example:
 
       .author {
         font-size: 100%;
-
-        text-align: center;
-
+        margin:0%;
+        text-align: left;
+        font-weight: bold;
+        color: rgb(85, 85, 85);
       }
 
       /* .author > #uri:hover{
@@ -90,6 +91,7 @@ Example:
         width: 100%;
         box-sizing: border-box;
       }
+    
 
       .description.brief {
         /* ellipsis te muestra los puntos suspensivos */
@@ -114,23 +116,22 @@ Example:
       .publishedAt {
         text-align: left;
         font-size: 90%;
+        margin:0%;
         font-weight: bold;
         color: rgb(85, 85, 85);
       }
 
       paper-toolbar {
         text-align: center;
-        font-size: 250%;
-        background: rgb(92, 207, 92);
+        background: #42a5f5;
       }
       .barra{
-        margin-top: 5px;
-        margin-left: 10px;
-        font-size: 50%;
+        font-size:18px;
         text-align: left;
         font-family:Verdana,Helvetica;
+        font-weight:bold;
       }
-      .boton{
+      /* .boton{
         margin-top: 5px;
         margin-right: 10px;
         float:right;
@@ -139,15 +140,29 @@ Example:
         font-family:Verdana,Helvetica;
         font-weight:bold;
         color:white;
-        background:#035803;
-        /* border:0px;
-        width:80px;
-        height:19px; */
+        background:#0d47a1;
+        width: 80px;
+        height: 24px;
+
+      } */
+      .limp{
+        margin-top: 5px;
+        margin-right: 10px;
+        margin:0;
+        float:right;
+        font-size:15px;
+        font-family:Verdana,Helvetica;
+        font-weight:bold;
+        color:white;
       }
+      .limp:hover{
+        text-decoration: underline;
+      }
+      
+
       .input-container {
         
         flex: none;
-        margin: 0 8px 0 16px;
         position: relative;
         /* top: -2px; */
         -webkit-animation: fadein 0.3s;
@@ -159,66 +174,86 @@ Example:
         -o-animation: fadein 0.3s;
         /* Opera < 12.1 */
         animation: fadein 0.3s;
+       
+        @apply(--layout-horizontal);
       }
 
       input {
         background-color: transparent;
         outline: none;
         border: none;
-        border-bottom: 2px solid #eee;
+        border-bottom: 1px solid #eee;
         width: 100%;
         font-size: 16px;
         font-family: 'Dosis', sans-serif;
         color: white;
-        font-weight: bold;
+        /* font-weight: bold; */
+        
       }
-
+     
       .container {
         padding: 8px 12px;
       }
-
+      .noResults{
+        text-align: center;
+        font-size: 100%;
+        font-weight: bolder;
+      }
+      .header{
+        padding: 8px 16px;
+        @apply(--layout-vertical);
+      }
+      #img{
+        /* margin-top: -3px;
+        margin-right: 10px;
+        margin-left: -10px; */
+        width: 100%;
+        height: 100%;
+        float:none;
+        
+      }
       
     </style>
     <iron-ajax id="peticion" handle-as="json" url="https://newsapi.org/v2/everything?q={{search}}&sortBy=publishedAt&apiKey={{api_key}}&language={{language}}"
       on-response="getCurrentData">
     </iron-ajax>
 
-    <paper-header-panel class="waterfall">
-      <paper-toolbar slot="header">
+    <paper-header-panel mode="waterfall" class="scroll">
+      <paper-toolbar slot="header" class="header">
         <div class="barra">
-          News
-          <button class="boton">
-            <td><input type="submit" value="Home" on-touch="home"></td>  
-          </button>
+          <!-- <img id="img" src="/Img/newsP.png" alt=""> -->
+          <!-- <button class="boton" on-click="clean">Clear</button> -->
+          <p  class="limp" on-click="clean">Clear</p>
         </div>
         <div class="input-container">
-          <input id="searchBox" placeholder="Introduzca su búsqueda" on-keyup="keyupInput" value$="{{search}}" />
+          <input id="searchBox" placeholder="Introduzca su búsqueda " on-keyup="keyupInput" value$="{{search}}" />
           
         </div>
       </paper-toolbar>
       <div class="container">
         <template is="dom-repeat" items="{{articles}}">
           <div id="lista">
-
-            <p class="author">
-              Autor: {{item.author}}
-            </p>
-
             <p class="title">
               <a id="uri" href={{item.url}}> {{item.title}}</a>
             </p>
 
             <template is="dom-if" if="{{item.urlToImage}}">
-              <img id="image" src="{{item.urlToImage}}">
+                <a title="Pinche" href={{item.url}}><img id="image" src="{{item.urlToImage}}" title="Pinche"> </a>
+             
             </template>
 
             <p class="description brief" on-click="toggleSize">Descripción: {{item.description}}</p>
+
+            <p class="author">
+              Autor: {{item.author}}
+            </p>
 
             <p class="publishedAt"> Fecha: {{item.publishedAt}}</p>
           </div>
         </template>
         <template is="dom-if" if="{{isEmpty}}">
-          <p>Sin resultados</p>
+          <p class="noResults">Sin resultados para su búsqueda</p>
+          <img id="img" src="/Img/noResultados.jpg" alt="">
         </template>
       </div>
     </paper-header-panel>
@@ -322,8 +357,10 @@ Example:
         target.classList.toggle("brief");
 
       },
-      home: function(e){
-        this.set("articles", list);
+      clean: function(e){
+        this.set("articles", []);
+        this.$.searchBox.value = "";
+        this.isEmpty= false;
       }
     });
   </script>
