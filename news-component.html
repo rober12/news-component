@@ -227,14 +227,14 @@ Example:
         float: right;
       }
       #emptyResultsImage{
-        width: 250px;
+        width: 85%;
       }
     </style>
     <iron-ajax id="peticion" handle-as="json" url="https://newsapi.org/v2/everything?q={{search}}&sortBy=publishedAt&apiKey={{api_key}}&language={{language}}"
       on-response="getCurrentData">
     </iron-ajax>
 
-    <paper-header-panel mode="waterfall" class="scroll">
+    <paper-header-panel mode="scroll" >
       <paper-toolbar slot="header" class="header">
         <!-- <button class="boton" on-click="clean">Clear</button> -->
         
@@ -248,12 +248,13 @@ Example:
         <template is="dom-repeat" items="{{articles}}">
           <div id="lista">
             <p class="title">
-              <a id="uri" href={{item.url}}> {{item.title}}</a>
+              <a id="uri" href={{item.url}} target="_blank"> {{item.title}}</a>
             </p>
 
             <template is="dom-if" if="{{item.urlToImage}}">
-              <a title="Pinche" href={{item.url}}>
-                <img id="image" src="{{item.urlToImage}}" title="Pinche"> </a>
+              <a title="" href={{item.url}} target="_blank">
+                <img id="image" src="{{item.urlToImage}}" title="Pinche, para acceder al articulo">
+              </a>
 
             </template>
 
