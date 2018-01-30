@@ -70,14 +70,16 @@ Example:
 
       #uri {
         text-decoration: none;
-        color: black;
+        color: #333333;
         font-weight: bold;
       }
 
-      .title {}
+      .title {
+        font: 20px/22px 'ascombold',sans-serif;
+      }
 
       .title>#uri:hover {
-        color: darkgoldenrod;
+        color: #E68C12;
         transition: color 0.2s linear;
 
       }
@@ -104,12 +106,14 @@ Example:
       }
 
       .description {
-        font-size: 120%;
+        /* font-size: 120%; */
+        color: #6b6b6b;
+        font: 15px/20px 'sourcesans',sans-serif;
         text-align: justify;
       }
 
       .description:hover {
-        color: rgb(94, 89, 89);
+        color: #333333;
         cursor: pointer;
       }
 
@@ -306,6 +310,11 @@ Example:
           type: String,
           value: ""
         },
+        showClear: {
+          type: String,
+          computed: "checkClear(search)"
+
+        }
       },
 
       // Element Lifecyclearticles
@@ -358,17 +367,12 @@ Example:
         this.$.peticion.generateRequest();
       },
       keyupInput: function (e) {
+        this.search = this.$.searchBox.value;
         if (e.keyCode === 13) {
-          this.search = this.$.searchBox.value;
           // Hacer otra peticion con los datos nuevos filtros
           this.$.peticion.generateRequest();
 
           // Quitar el valor de busqueda
-        }
-        if(this.$.searchBox.value != ""){
-          this.$$('#clear').classList.add("active");
-        } else {
-          this.$$('#clear').classList.remove("active");
         }
       },
       // esta función nos permite presentar solo tres lineas de la descripcion y cuando pulses el texto que se despliegue entero
@@ -381,6 +385,14 @@ Example:
         this.set("articles", []);
         this.$.searchBox.value = "";
         this.isEmpty = false;
+        this.search = "";
+      },
+      checkClear: function(search_value){
+        if (search_value){
+          this.$$('#clear').classList.add("active");
+        } else {
+          this.$$('#clear').classList.remove("active");
+        }
       }
     });
   </script>
