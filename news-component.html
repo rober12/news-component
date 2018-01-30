@@ -57,7 +57,7 @@ Example:
 
       .author {
         font-size: 100%;
-        margin:0%;
+        margin: 0%;
         text-align: left;
         font-weight: bold;
         color: rgb(85, 85, 85);
@@ -91,7 +91,7 @@ Example:
         width: 100%;
         box-sizing: border-box;
       }
-    
+
 
       .description.brief {
         /* ellipsis te muestra los puntos suspensivos */
@@ -116,7 +116,7 @@ Example:
       .publishedAt {
         text-align: left;
         font-size: 90%;
-        margin:0%;
+        margin: 0%;
         font-weight: bold;
         color: rgb(85, 85, 85);
       }
@@ -124,13 +124,17 @@ Example:
       paper-toolbar {
         text-align: center;
         background: #42a5f5;
+        box-sizing: border-box;
+        @apply(--layout-end);
       }
-      .barra{
-        font-size:18px;
+
+      .barra {
+        font-size: 18px;
         text-align: left;
-        font-family:Verdana,Helvetica;
-        font-weight:bold;
+        font-family: Verdana, Helvetica;
+        font-weight: bold;
       }
+
       /* .boton{
         margin-top: 5px;
         margin-right: 10px;
@@ -145,23 +149,27 @@ Example:
         height: 24px;
 
       } */
-      .limp{
-        margin-top: 5px;
-        margin-right: 10px;
-        margin:0;
-        float:right;
-        font-size:15px;
-        font-family:Verdana,Helvetica;
-        font-weight:bold;
-        color:white;
+
+      .limp {
+        position: absolute;
+        font-size: 15px;
+        font-family: Verdana, Helvetica;
+        font-weight: bold;
+        color: white;
+        top:-20px;
+        right:0;
+        display: none;
       }
-      .limp:hover{
+
+      .limp.active{
+        display:inline-block;
+      }
+      .limp:hover {
         text-decoration: underline;
       }
-      
+
 
       .input-container {
-        
         flex: none;
         position: relative;
         /* top: -2px; */
@@ -174,45 +182,53 @@ Example:
         -o-animation: fadein 0.3s;
         /* Opera < 12.1 */
         animation: fadein 0.3s;
-       
+        height: 30px;
+        margin-right: 15px;
         @apply(--layout-horizontal);
+        @apply(--layout-flex);
       }
-
+      @apply(--layout-center-center);
       input {
         background-color: transparent;
         outline: none;
         border: none;
-        border-bottom: 1px solid #eee;
+        border-bottom: 1px solid white;
         width: 100%;
         font-size: 16px;
         font-family: 'Dosis', sans-serif;
         color: white;
+
         /* font-weight: bold; */
-        
       }
-     
+      input::placeholder{
+        color:white;
+      }
+
       .container {
         padding: 8px 12px;
+        @apply(--layout-vertical);
+        @apply(--layout-center);
       }
-      .noResults{
+
+      .noResults {
         text-align: center;
         font-size: 100%;
         font-weight: bolder;
       }
-      .header{
-        padding: 8px 16px;
-        @apply(--layout-vertical);
+
+      .header {
+        padding: 16px 16px;
+        box-sizing: border-box;
+        @apply(--layout-horizontal);
       }
-      #img{
-        /* margin-top: -3px;
-        margin-right: 10px;
-        margin-left: -10px; */
-        width: 100%;
-        height: 100%;
-        float:none;
-        
+
+      #img {
+        height: 45px;
+        float: right;
       }
-      
+      #emptyResultsImage{
+        width: 250px;
+      }
     </style>
     <iron-ajax id="peticion" handle-as="json" url="https://newsapi.org/v2/everything?q={{search}}&sortBy=publishedAt&apiKey={{api_key}}&language={{language}}"
       on-response="getCurrentData">
@@ -220,15 +236,13 @@ Example:
 
     <paper-header-panel mode="waterfall" class="scroll">
       <paper-toolbar slot="header" class="header">
-        <div class="barra">
-          <!-- <img id="img" src="/Img/newsP.png" alt=""> -->
-          <!-- <button class="boton" on-click="clean">Clear</button> -->
-          <p  class="limp" on-click="clean">Clear</p>
-        </div>
+        <!-- <button class="boton" on-click="clean">Clear</button> -->
+        
         <div class="input-container">
+          <p class="limp" id="clear" on-click="clean">Clear</p>
           <input id="searchBox" placeholder="Introduzca su búsqueda " on-keyup="keyupInput" value$="{{search}}" />
-          
         </div>
+        <img id="img" src="/Img/News-Briefs.png" alt="">
       </paper-toolbar>
       <div class="container">
         <template is="dom-repeat" items="{{articles}}">
@@ -238,8 +252,9 @@ Example:
             </p>
 
             <template is="dom-if" if="{{item.urlToImage}}">
-                <a title="Pinche" href={{item.url}}><img id="image" src="{{item.urlToImage}}" title="Pinche"> </a>
-             
+              <a title="Pinche" href={{item.url}}>
+                <img id="image" src="{{item.urlToImage}}" title="Pinche"> </a>
+
             </template>
 
             <p class="description brief" on-click="toggleSize">Descripción: {{item.description}}</p>
@@ -253,7 +268,7 @@ Example:
         </template>
         <template is="dom-if" if="{{isEmpty}}">
           <p class="noResults">Sin resultados para su búsqueda</p>
-          <img id="img" src="/Img/noResultados.jpg" alt="">
+          <img id="emptyResultsImage" src="/Img/noResultados.jpg" alt="">
         </template>
       </div>
     </paper-header-panel>
@@ -348,7 +363,11 @@ Example:
           this.$.peticion.generateRequest();
 
           // Quitar el valor de busqueda
-
+        }
+        if(this.$.searchBox.value != ""){
+          this.$$('#clear').classList.add("active");
+        } else {
+          this.$$('#clear').classList.remove("active");
         }
       },
       // esta función nos permite presentar solo tres lineas de la descripcion y cuando pulses el texto que se despliegue entero
@@ -357,10 +376,10 @@ Example:
         target.classList.toggle("brief");
 
       },
-      clean: function(e){
+      clean: function (e) {
         this.set("articles", []);
         this.$.searchBox.value = "";
-        this.isEmpty= false;
+        this.isEmpty = false;
       }
     });
   </script>
