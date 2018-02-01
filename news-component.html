@@ -315,6 +315,10 @@ Example:
           type: String,
           computed: "checkClear(search)"
 
+        },
+        latency:{
+          value:2000,
+          type:Number
         }
       },
 
@@ -394,6 +398,9 @@ Example:
         } else {
           this.$$('#clear').classList.remove("active");
         }
+      },
+      sleep: function(cb){
+        window.setTimeout(cb,this.latency);
       }
     });
   </script>
