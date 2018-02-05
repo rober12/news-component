@@ -247,7 +247,7 @@ Example:
           <p class="limp" id="clear" on-click="clean">Clear</p>
           <input id="searchBox" placeholder="Introduzca su búsqueda " on-keyup="keyupInput" value$="{{search}}" />
         </div>
-        <img id="img" src="/Img/News-Briefs.png" alt="">
+        <img id="img" src="/Img/News-Briefs.png" alt="logotipo news">
       </paper-toolbar>
       <div class="container">
         <template is="dom-repeat" items="{{articles}}">
@@ -258,7 +258,7 @@ Example:
 
             <template is="dom-if" if="{{item.urlToImage}}">
               <a title="" href={{item.url}} target="_blank">
-                <img id="image" src="{{item.urlToImage}}" title="Pinche, para acceder al articulo">
+                <img id="image" src="{{item.urlToImage}}" title="Pinche, para acceder al artículo">
               </a>
 
             </template>
@@ -274,7 +274,7 @@ Example:
         </template>
         <template is="dom-if" if="{{isEmpty}}">
           <p class="noResults">Sin resultados para su búsqueda</p>
-          <img id="emptyResultsImage" src="/Img/noResultados.jpg" alt="">
+          <img id="emptyResultsImage" src="/Img/noResultados.jpg" alt="Imágen de error 404">
         </template>
       </div>
     </paper-header-panel>
