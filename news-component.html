@@ -233,9 +233,7 @@ Example:
           <p class="limp" id="clear" on-click="clean">Clear</p>
           <input id="searchBox" placeholder="Introduzca su búsqueda " on-keyup="keyupInput" value$="{{search}}" />
         </div>
-      <a href="" on-touch="clean">
         <img id="img" src="/Img/News-Briefs.png" >
-      </a>
       </paper-toolbar>
       <div class="container">
         <template is="dom-repeat" items="{{articles}}">
@@ -251,7 +249,7 @@ Example:
 
             </template>
 
-            <p class="description brief" on-click="toggleSize">Descripción: {{item.description}}</p>
+            <p class="description brief" on-click="toggleSize"> {{item.description}}</p>
 
             <p class="author">
               Autor: {{item.author}}
