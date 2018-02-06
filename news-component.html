@@ -44,7 +44,7 @@ Example:
         min-width: 350px;
         /* border:1px solid black; */
         /* background-color: #e2e2e2; */
-        background-color: #333333;
+        background-color: lightblue;
       }
 
       #lista {
@@ -54,7 +54,7 @@ Example:
         padding: 8px 12px;
         margin: 6px 0;
         /* background-color: white; */
-        background-color: #6b6b6b;
+        background-color: white;
       }
 
       .author {
@@ -110,9 +110,8 @@ Example:
       .description {
         /* font-size: 120%; */
         color: #6b6b6b;
-        /* font: 15px/20px 'sourcesans',sans-serif; */
-        font: 20px/25px 'sourcesans',sans-serif;
-        /* text-align: justify; */
+        font: 15px/20px 'sourcesans',sans-serif;
+        text-align: justify;
       }
 
       .description:hover {
@@ -141,21 +140,6 @@ Example:
         font-family: Verdana, Helvetica;
         font-weight: bold;
       }
-
-      /* .boton{
-        margin-top: 5px;
-        margin-right: 10px;
-        float:right;
-        text-decoration: none;
-        font-size:10px;
-        font-family:Verdana,Helvetica;
-        font-weight:bold;
-        color:white;
-        background:#0d47a1;
-        width: 80px;
-        height: 24px;
-
-      } */
 
       .limp {
         position: absolute;
@@ -249,7 +233,9 @@ Example:
           <p class="limp" id="clear" on-click="clean">Clear</p>
           <input id="searchBox" placeholder="Introduzca su búsqueda " on-keyup="keyupInput" value$="{{search}}" />
         </div>
+      <a href="" on-touch="clean">
         <img id="img" src="/Img/News-Briefs.png" >
+      </a>
       </paper-toolbar>
       <div class="container">
         <template is="dom-repeat" items="{{articles}}">
