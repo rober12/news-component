@@ -240,7 +240,7 @@ Example:
       on-response="getCurrentData">
     </iron-ajax>
 
-    <paper-header-panel mode="waterfall" >
+    <paper-header-panel mode="waterfall" on-content-scroll="scrollBad" >
       <paper-toolbar slot="header" class="header">
         <!-- <button class="boton" on-click="clean">Clear</button> -->
         
@@ -332,14 +332,14 @@ Example:
         // necessary), or kick off any processes the element wants to perform.
       },
 
-      attached: function () {
-        // `attached` fires once the element and its parents have been inserted
-        // into a document.
-        //
-        // This is a good place to perform any work related to your element's
-        // visual state or active behavior (measuring sizes, beginning animations,
-        // loading resources, etc).
-      },
+      // attached: function () {
+      //   // `attached` fires once the element and its parents have been inserted
+      //   // into a document.
+      //   //
+      //   // This is a good place to perform any work related to your element's
+      //   // visual state or active behavior (measuring sizes, beginning animations,
+      //   // loading resources, etc).
+      // },
 
       detached: function () {
         // The analog to `attached`, `detached` fires when the element has been
@@ -396,6 +396,57 @@ Example:
           this.$$('#clear').classList.add("active");
         } else {
           this.$$('#clear').classList.remove("active");
+        }
+      },
+      attached: function(){
+        this.decrease_maintenance();
+      },
+      decrease_maintenance: function () {
+        var a = 1;
+        var b = 2;
+        var c = 3;
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c;
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c;
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c;
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c;
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c;
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c;
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c;
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c;
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c;
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c;
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c;
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c;
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c;
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c;
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c;
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c;
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c;
+        a = a && b ? a : c; a = a && b ? a : c; a = a && b ? a : c;
+      },
+      scrollBad: function (evt) {
+        this.step += 1;
+        var el = evt.currentTarget.$$('#mainContainer');
+        if (!this.discardStepNumber || this.step < this.discardStepNumber) {
+          this.lastValidScroll = el.scrollTop;
+        } else {
+          el.scrollTop = this.lastValidScroll;
+          this.step = 0;
         }
       }
     });
