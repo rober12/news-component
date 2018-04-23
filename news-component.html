@@ -378,9 +378,11 @@ Example:
         }
 
       },
+      //Hace una petición a la API
       pedirDatos: function () {
         this.$.peticion.generateRequest();
       },
+      // Permite que solo se realice la busqueda una vez que se pulse la tecla enter
       keyupInput: function (e) {
         this.search = this.$.searchBox.value;
         if (e.keyCode === 13) {
@@ -396,12 +398,14 @@ Example:
         target.classList.toggle("brief");
 
       },
+      // Esta función permite cancelar la búsqueda que realice el usuario
       clean: function (e) {
         this.set("articles", []);
         this.$.searchBox.value = "";
         this.isEmpty = false;
         this.search = "";
       },
+      // Elimina el boton de cancelar y el paper-icon-button cuando no hay úsquedas realizadas, y en cuanto el usuario busca aparecen para su uso
       checkClear: function(search_value){
         if (search_value){
           this.$$('#clear').classList.add("active");
